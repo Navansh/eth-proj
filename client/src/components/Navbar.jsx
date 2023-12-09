@@ -20,8 +20,7 @@ const Navbar = () => {
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {["Receive Money", "Verify User"].map((item, index) => (
           <NavBarItem key={item + index} title={item} />
-        ))}{" "}
-        */}
+        ))}
         <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
           Login
           {/* add the connect with Metamask button here which sets the to Wallet address  */}
