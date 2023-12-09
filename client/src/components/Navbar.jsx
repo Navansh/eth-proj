@@ -11,16 +11,8 @@ const NavBarItem = ({ title, classprops }) => (
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
-  const {
-    currentAccount,
-    connectWallet,
-    handleChange,
-    sendTransaction,
-    formData,
-    isLoading,
-    swapToggle,
-    swap,
-  } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, swap, setMode } =
+    useContext(TransactionContext);
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
@@ -28,22 +20,40 @@ const Navbar = () => {
         <img src={logo} alt="logo" className="w-32 cursor-pointer" />
       </div>
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
-        {["Receive Money", "Verify User"].map((item, index) => (
-          <NavBarItem key={item + index} title={item} onClick={swap}/>
-        ))}
-        {!currentAccount ? (
-  <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]" onClick={connectWallet}>
-    Connect to hard Wallet
-    {/* add the connect with Metamask button here which sets the to Wallet address  */}
-  </li>
-) : (
-  <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-    Connected to hard Wallet
-    {/* add the connect with Metamask button here which sets the to Wallet address  */}
-  </li>
-)}
+        <li>
+          <NavBarItem
+            key={1}
+            title="Receive Money"
+            onClick={() => {
+              setMode("receive");
+            }}
+          />
+        </li>
+        <li>
+          <NavBarItem
+            key={2}
+            title="Verify User"
+            onClick={() => {
+              setMode("verify");
+            }}
+          />
+        </li>
 
-        
+        {!currentAccount ? (
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+          <li
+            className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            onClick={connectWallet}
+          >
+            Connect to Hard Wallet
+            {/* add the connect with Metamask button here which sets the to Wallet address  */}
+          </li>
+        ) : (
+          <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+            Connected to Hard Wallet
+            {/* add the connect with Metamask button here which sets the to Wallet address  */}
+          </li>
+        )}
       </ul>
       <div className="flex relative">
         {!toggleMenu && (

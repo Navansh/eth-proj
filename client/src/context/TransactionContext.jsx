@@ -34,9 +34,9 @@ export const TransactionsProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [swapToggle, setSwapToggle] = useState(false);
 
-  const swap = (e)=>{
-    setSwapToggle(!e)
-  }
+  const swap = (e) => {
+    setSwapToggle(!e);
+  };
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -180,9 +180,13 @@ export const TransactionsProvider = ({ children }) => {
     checkIfTransactionsExists();
   }, [transactionCount]);
 
+  const [mode, setMode] = useState("receive");
+
   return (
     <TransactionContext.Provider
       value={{
+        mode,
+        setMode,
         transactionCount,
         connectWallet,
         transactions,
