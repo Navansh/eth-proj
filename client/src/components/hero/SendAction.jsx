@@ -2,14 +2,15 @@ import React, { useContext, useState } from "react";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import OtpInput from "react-otp-input";
-import { TransactionContext } from "../../context/TransactionContext";
-import { shortenAddress } from "../../utils/shortenAddress";
-import Loader from "../Loader";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import axios from "axios";
+import Loader from "../Loader";
+import { shortenAddress } from "../../utils/shortenAddress";
+import { TransactionContext } from "../../context/TransactionContext";
 
 const style = {
   position: "absolute",
@@ -140,7 +141,12 @@ const SendAction = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" className=" text-center" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            className=" text-center"
+            variant="h6"
+            component="h2"
+          >
             Please enter the registered PIN
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -149,19 +155,24 @@ const SendAction = () => {
               value={otp}
               onChange={(e) => handleOtpChange(e.target.value)}
               maxLength={6}
-              style={{ width: "100%", height: "40px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              fontSize: "20px",
-              textAlign: "center",
-              outline: "none",
-              color: "#000",
-              backgroundColor: "#fff"}}
+              style={{
+                width: "100%",
+                height: "40px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                fontSize: "20px",
+                textAlign: "center",
+                outline: "none",
+                color: "#000",
+                backgroundColor: "#fff",
+              }}
               className="my-2 w-full rounded-md py-2 px-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
             />
             <button
+              type="button"
               className="
-              w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black">
+              w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black"
+            >
               OK
             </button>
           </Typography>

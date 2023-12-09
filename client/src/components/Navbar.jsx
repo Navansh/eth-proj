@@ -41,6 +41,11 @@ const Navbar = () => {
             <NavBarItem key={2} title="Verify User" />
           </button>
         </li>
+        <li>
+          <button type="button" onClick={handleReceiveMode}>
+            <NavBarItem key={1} title="Receive Money After Verification" />
+          </button>
+        </li>
 
         {!currentAccount ? (
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions

@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { decryptPrivateKey } from "./enc-denc";
 
 // Initialize provider using environment variable
 const provider = new ethers.InfuraProvider(
@@ -6,30 +7,22 @@ const provider = new ethers.InfuraProvider(
   import.meta.env.VITE_INFURA_API_KEY
 );
 
-// Decrypt function (if applicable)
-function decrypt(privateKey) {
-  // Implement decryption logic if necessary
-  return privateKey;
-}
-
 export async function initTransaction(
-  privateKey = "4265732c8d6221c947d24f72d7b41f71058d4a80da0922435c14ed296f653612",
+  encryptedPrivateKey = "4265732c8d6221c947d24f72d7b41f71058d4a80da0922435c14ed296f653612",
   toAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  value = "0.0000001"
+  value = "0.0000001",
+  password = "234234",
+  decryptSalt = "",
+  decryptIV = ""
 ) {
   try {
-    const decryptedKey = decrypt(privateKey);
+    const decryptedKey = decryptPrivateKey(
+      encryptedPrivateKey,
+      password,
+      decryptSalt,
+      decryptIV
+    );
     const wallet = new ethers.Wallet(decryptedKey, provider);
-
-    // Validate input parameters
-    if (!privateKey || !toAddress || !value) {
-      throw new Error("Invalid input parameters");
-    }
-
-    // Validate the destination address
-    if (!ethers.isAddress(toAddress)) {
-      throw new Error("Invalid destination address");
-    }
 
     // Parse the transaction value
     const parsedValue = ethers.parseEther(value);
