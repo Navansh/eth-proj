@@ -27,6 +27,12 @@ export const TransactionsProvider = ({ children }) => {
     keyword: "",
     message: "",
   });
+
+  const [nfcResponse, setNfcResponse] = useState({
+    encryptedPrivateKey: null,
+    encryptSalt: null,
+    encryptIV: null,
+  });
   const [currentAccount, setCurrentAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(
@@ -178,6 +184,18 @@ export const TransactionsProvider = ({ children }) => {
       console.log(error);
 
       throw new Error("No ethereum object");
+    }
+  };
+
+  const startTransaction = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get("http://localhost:4000/retrieve");
+      setNfcResponse(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
