@@ -36,7 +36,7 @@ const Welcome = () => {
   } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
-    const { addressTo, amount, keyword, message } = formData;
+    const {  amount, message } = formData;
 
     e.preventDefault();
 
