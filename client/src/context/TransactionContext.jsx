@@ -32,6 +32,11 @@ export const TransactionsProvider = ({ children }) => {
     localStorage.getItem("transactionCount")
   );
   const [transactions, setTransactions] = useState([]);
+  const [swapToggle, setSwapToggle] = useState(false);
+
+  const swap = (e)=>{
+    setSwapToggle(!e)
+  }
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -186,6 +191,8 @@ export const TransactionsProvider = ({ children }) => {
         sendTransaction,
         handleChange,
         formData,
+        swapToggle,
+        swap,
       }}
     >
       {children}
