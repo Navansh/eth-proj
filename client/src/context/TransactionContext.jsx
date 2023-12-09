@@ -33,6 +33,7 @@ export const TransactionsProvider = ({ children }) => {
     encryptSalt: null,
     encryptIV: null,
   });
+  const [modalLoading,setModalLoading] = useState(false);
   const [currentAccount, setCurrentAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(
