@@ -21,9 +21,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
-const [ammount, setAmmount] = useState(0);
-const [keyword, setKeyword] = useStste(null);
-const [mssg, setMssg] = useState(null);
+// const [ammount, setAmmount] = useState(0);
+// const [keyword, setKeyword] = useStste(null);
+// const [mssg, setMssg] = useState(null);
 
 const Welcome = () => {
   const {

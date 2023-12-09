@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-function encryptPrivateKey(privateKey, password) {
+export function encryptPrivateKey(privateKey, password) {
   const encryptSalt = CryptoJS.lib.WordArray.random(128 / 8).toString(
     CryptoJS.enc.Hex
   );
@@ -24,7 +24,7 @@ function encryptPrivateKey(privateKey, password) {
   };
 }
 
-function decryptPrivateKey(
+export function decryptPrivateKey(
   encryptedPrivateKey,
   password,
   decryptSalt,
@@ -42,7 +42,7 @@ function decryptPrivateKey(
   return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-function Sud0Wallet() {
+export function Sud0Wallet() {
   const [privateKey, setPrivateKey] = useState("");
   const [encryptPassword, setEncryptPassword] = useState("");
   const [decryptPassword, setDecryptPassword] = useState("");
