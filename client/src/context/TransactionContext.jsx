@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import axios from "axios";
 
 import { contractABI, contractAddress } from "../utils/constants";
 
@@ -119,12 +120,17 @@ export const TransactionsProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
 
+      const response = await axios.get("http://localhost:4000/connect");
+      if (response.status !== 200) {
+        throw new Error("Hardware Wallet Error");
+      }
+      console.log("Hardware wallet connected");
+
       setCurrentAccount(accounts[0]);
       window.location.reload();
     } catch (error) {
       console.log(error);
-
-      throw new Error("No ethereum object");
+      //   throw new Error("No ethereum object");
     }
   };
 

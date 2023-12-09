@@ -9,6 +9,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.3.4",
     "autoprefixer": "^10.4.0",
+    "axios": "^1.6.2",
     "crypto-js": "^4.2.0",
     "eth-revert-reason": "^1.0.3",
     "ethers": "^5.7.2",

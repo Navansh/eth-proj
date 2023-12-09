@@ -5,10 +5,10 @@ const cors = require("cors")
 
 const app = express()
 app.use(cors())
-const port1 = 3000
+const port1 = 4000
 
 const port = new SerialPort({
-	path: "COM5", //change this to the port your arduino is connected to
+	path: "COM6", //change this to the port your arduino is connected to
 	baudRate: 9600,
 })
 
@@ -24,12 +24,10 @@ app.get("/connect", async (req, res) => {
 })
 
 app.get("/retrieve", async (req, res) => {
-	try {
-		const data = await receiveData()
-		res.send(data.join(","))
-	} catch (error) {
-		res.status(500).send(error.message)
-	}
+	reciveData()
+	setTimeout(() => {
+		res.send(data1 + "," + data2 + "," + data3)
+	}, 5000)
 })
 // app.get("/", async (req, res) => {
 //   await connectDevice();
