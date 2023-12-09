@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
+import useModeStore from "../context/modeStore.js";
 import { TransactionContext } from "../context/TransactionContext";
 
 import logo from "../../images/logo.png";
@@ -11,8 +12,18 @@ const NavBarItem = ({ title, classprops }) => (
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
-  const { currentAccount, connectWallet, swap, setMode } =
-    useContext(TransactionContext);
+  const { currentAccount, connectWallet } = useContext(TransactionContext);
+
+  const { setMode } = useModeStore();
+
+  const handleReceiveMode = () => {
+    setMode("receive");
+  };
+
+  const handleVerifyMode = () => {
+    console.log("verify");
+    setMode("verify");
+  };
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
@@ -21,22 +32,14 @@ const Navbar = () => {
       </div>
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
         <li>
-          <NavBarItem
-            key={1}
-            title="Receive Money"
-            onClick={() => {
-              setMode("receive");
-            }}
-          />
+          <button type="button" onClick={handleReceiveMode}>
+            <NavBarItem key={1} title="Receive Money" />
+          </button>
         </li>
         <li>
-          <NavBarItem
-            key={2}
-            title="Verify User"
-            onClick={() => {
-              setMode("verify");
-            }}
-          />
+          <button type="button" onClick={handleVerifyMode}>
+            <NavBarItem key={2} title="Verify User" />
+          </button>
         </li>
 
         {!currentAccount ? (
