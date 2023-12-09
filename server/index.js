@@ -15,18 +15,18 @@ const port = new SerialPort({
 var data1, data2, data3
 
 app.get("/connect", async (req, res) => {
-	try {
-		await connectDevice()
-		res.sendStatus(200)
-	} catch (error) {
-		res.status(500).send(error.message)
-	}
+	await connectDevice()
+	res.sendStatus(200)
 })
 
 app.get("/retrieve", async (req, res) => {
 	reciveData()
 	setTimeout(() => {
-		res.send(data1 + "," + data2 + "," + data3)
+		res.status(200).json({
+			encryptedPrivateKey: data1,
+			decryptSalt: data2,
+			decryptIV: data3,
+		})
 	}, 5000)
 })
 // app.get("/", async (req, res) => {
@@ -56,7 +56,7 @@ async function connectDevice() {
 	})
 }
 
-async function receiveData() {
+async function reciveData() {
 	var data = ""
 	var counter = 0
 	const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }))

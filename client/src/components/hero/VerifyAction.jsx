@@ -5,6 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { TransactionContext } from "../../context/TransactionContext";
 import { shortenAddress } from "../../utils/shortenAddress";
 import Loader from "../Loader";
+import Dropdown from "./Dropdown";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -54,18 +55,7 @@ const VerifyAction = () => {
         </div>
       </div>
       <div className="p-4 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-        <Input
-          placeholder="Amount (ETH)"
-          name="amount"
-          type="number"
-          handleChange={handleChange}
-        />
-        <Input
-          placeholder="Enter Message"
-          name="message"
-          type="text"
-          handleChange={handleChange}
-        />
+        <Dropdown />
 
         {isLoading ? (
           <Loader />
@@ -73,9 +63,9 @@ const VerifyAction = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+            className="text-white w-full mt-4 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
           >
-            Receive now
+            Verify now
           </button>
         )}
       </div>

@@ -7,7 +7,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import axios from "axios";
 import Circler from "../Circler";
+import { TransactionContext } from "../../context/TransactionContext";
+import { shortenAddress } from "../../utils/shortenAddress";
+import Loader from "../Loader";
+import { initTransaction } from "../../lib/instance";
 
 const style = {
   position: "absolute",
@@ -15,6 +20,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  height: 200,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -74,7 +80,7 @@ const SendAction = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      // setModalLoading(false);
+      setModalLoading(false);
     }
   };
 
@@ -83,6 +89,47 @@ const SendAction = () => {
     setOpen(true);
     startTransaction();
   };
+
+  const [pinLoading, setPinLoading] = useState(false);
+  console.log(
+    nfcResponse.encryptedPrivateKey,
+    currentAccount,
+    formData.amount,
+    otp,
+    nfcResponse.decryptIV,
+    nfcResponse.decryptSalt
+  );
+  const submitPin = (e) => {
+    // start loading
+    // start transaction
+    // wait for transaction to complete
+    // if wron
+    setPinLoading(true);
+    try {
+      console.log(
+        nfcResponse.encryptedPrivateKey,
+        currentAccount,
+        formData.amount,
+        otp,
+        nfcResponse.decryptIV,
+        nfcResponse.decryptSalt
+      );
+      initTransaction(
+        nfcResponse.encryptedPrivateKey,
+        currentAccount,
+        formData.amount,
+        otp,
+        nfcResponse.decryptIV,
+        nfcResponse.decryptSalt
+      );
+      handleClose();
+    } catch (err) {
+      setOtp("");
+    } finally {
+      setPinLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10 lg:bottom-8 relative">
       <div className="p-3 px-5 flex justify-end items-start flex-col rounded-xl h-40 sm:w-96 w-full my-5 eth-card .white-glassmorphism ">
@@ -140,16 +187,20 @@ const SendAction = () => {
       >
         <Box sx={style}>
           {modalLoading ? (
-            <div>
-              <Typography
-                id="modal-modal-title"
-                className=" text-center"
-                variant="h6"
-                component="h2"
-              >
-                Please tap your card
-              </Typography>
-              <Circler />
+            <div className="flex flex-col">
+              <div>
+                <Typography
+                  id="modal-modal-title"
+                  className=" text-center"
+                  variant="h6"
+                  component="h2"
+                >
+                  Please tap your card
+                </Typography>
+              </div>
+              <div className="relative -bottom-16 left-40">
+                <Circler />
+              </div>
             </div>
           ) : (
             // <Loader />
@@ -183,8 +234,9 @@ const SendAction = () => {
                   className="my-2 w-full rounded-md py-2 px-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
                 />
                 <button
-                  className="
-              w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black"
+                  type="button"
+                  onClick={submitPin}
+                  className="w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black"
                 >
                   OK
                 </button>

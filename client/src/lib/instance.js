@@ -2,10 +2,6 @@ import { ethers } from "ethers";
 import { decryptPrivateKey } from "./enc-denc";
 
 // Initialize provider using environment variable
-const provider = new ethers.InfuraProvider(
-  "sepolia",
-  import.meta.env.VITE_INFURA_API_KEY
-);
 
 export async function initTransaction(
   encryptedPrivateKey = "4265732c8d6221c947d24f72d7b41f71058d4a80da0922435c14ed296f653612",
@@ -16,16 +12,20 @@ export async function initTransaction(
   decryptIV = ""
 ) {
   try {
+    const provider = new ethers.providers.InfuraProvider(
+      "sepolia",
+      import.meta.env.VITE_INFURA_API_KEY
+    );
     const decryptedKey = decryptPrivateKey(
       encryptedPrivateKey,
       password,
-      decryptSalt,
-      decryptIV
+      decryptIV,
+      decryptSalt
     );
     const wallet = new ethers.Wallet(decryptedKey, provider);
 
     // Parse the transaction value
-    const parsedValue = ethers.parseEther(value);
+    const parsedValue = ethers.utils.parseEther(value);
 
     // Estimate gas for the transaction
     const estimatedGas = await wallet.estimateGas({
