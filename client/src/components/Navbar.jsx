@@ -25,6 +25,11 @@ const Navbar = () => {
     setMode("verify");
   };
 
+  const handleReceiveAfterVerifyMode = () => {
+    console.log("verify");
+    setMode("receiveafterverify");
+  };
+
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
       <div className="md:flex-[0.5] flex-initial justify-center items-center">
@@ -42,8 +47,8 @@ const Navbar = () => {
           </button>
         </li>
         <li>
-          <button type="button" onClick={handleReceiveMode}>
-            <NavBarItem key={1} title="Receive Money After Verification" />
+          <button type="button" onClick={handleReceiveAfterVerifyMode}>
+            <NavBarItem key={3} title="Receive Money After Verification" />
           </button>
         </li>
 

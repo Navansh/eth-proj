@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const items = [
-  { name: "Demo: Age Verification" },
-  { name: "Demo: Hotel Verification" },
-];
-
-const Dropdown = ({ setDropdown }) => {
+const Dropdown = ({ setDropdown, items }) => {
   const ref = useRef(null);
   const [selectedItem, setSelectedItem] = useState(null);
 

@@ -4,6 +4,8 @@ import Send from "./hero/Send";
 import SendAction from "./hero/SendAction";
 import Verify from "./hero/Verify";
 import VerifyAction from "./hero/VerifyAction";
+import SendAfterVerify from "./hero/SendAfterVerify";
+import SendAfterVerifyAction from "./hero/SendAfterVerifyAction";
 
 const Hero = () => {
   const { mode } = useModeStore();
@@ -22,6 +24,12 @@ const Hero = () => {
           <>
             <VerifyAction />
             <Verify />
+          </>
+        )}
+        {mode === "receiveafterverify" && (
+          <>
+            <SendAfterVerify />
+            <SendAfterVerifyAction />
           </>
         )}
       </div>
