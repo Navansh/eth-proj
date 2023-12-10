@@ -2,10 +2,33 @@ import React, { useContext } from "react";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 
+import OtpInput from "react-otp-input";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { MuiOtpInput } from "mui-one-time-password-input";
+import axios from "axios";
+import Circler from "../Circler";
 import { TransactionContext } from "../../context/TransactionContext";
 import { shortenAddress } from "../../utils/shortenAddress";
 import Loader from "../Loader";
-import Dropdown from "./Dropdown";
+import { initTransaction } from "../../lib/instance";
+import success from "../../success.svg";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  height: 200,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -18,10 +41,18 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
     className="my-2 w-full rounded-md py-2 px-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
   />
 );
-
 const VerifyAction = () => {
-  const { currentAccount, handleChange, sendTransaction, formData, isLoading } =
-    useContext(TransactionContext);
+  const {
+    currentAccount,
+    handleChange,
+    sendTransaction,
+    formData,
+    isLoading,
+    nfcResponse,
+    setNfcResponse,
+    modalLoading,
+    setModalLoading,
+  } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     const { amount, message } = formData;
@@ -32,6 +63,77 @@ const VerifyAction = () => {
 
     sendTransaction();
   };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [otp, setOtp] = useState("");
+
+  const handleOtpChange = (newValue) => {
+    setOtp(newValue);
+  };
+
+  const startTransaction = async () => {
+    setModalLoading(true);
+    try {
+      // add timeout
+      //   const response = await axios.get("http://localhost:4000/retrieve");
+      //   setNfcResponse(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleModal = (e) => {
+    e.preventDefault();
+    setOpen(true);
+    startTransaction();
+  };
+  const [th, setTh] = useState("");
+  const [pinLoading, setPinLoading] = useState(false);
+  const [successful, setSuccessful] = useState(false);
+  console.log(
+    nfcResponse.encryptedPrivateKey,
+    currentAccount,
+    formData.amount,
+    otp,
+    nfcResponse.decryptIV,
+    nfcResponse.decryptSalt
+  );
+  async function submitPin() {
+    // start loading
+    // start transaction
+    // wait for transaction to complete
+    // if wron
+    setPinLoading(true);
+    setSuccessful(false);
+    try {
+      console.log(
+        nfcResponse.encryptedPrivateKey,
+        currentAccount,
+        formData.amount,
+        otp,
+        nfcResponse.decryptIV,
+        nfcResponse.decryptSalt
+      );
+      const x = await initTransaction(
+        nfcResponse.encryptedPrivateKey,
+        currentAccount,
+        formData.amount,
+        otp,
+        nfcResponse.decryptIV,
+        nfcResponse.decryptSalt
+      );
+      setTh(x);
+      setSuccessful(true);
+    } catch (err) {
+      setOtp("");
+    } finally {
+      setPinLoading(false);
+    }
+  }
   return (
     <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10 lg:bottom-8 relative">
       <div className="p-3 px-5 flex justify-end items-start flex-col rounded-xl h-40 sm:w-96 w-full my-5 eth-card .white-glassmorphism ">
