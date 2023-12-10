@@ -20,14 +20,14 @@ app.get("/connect", async (req, res) => {
 })
 
 app.get("/retrieve", async (req, res) => {
-	reciveData()
+	await reciveData()
 	setTimeout(() => {
 		res.status(200).json({
 			encryptedPrivateKey: data1,
 			decryptSalt: data2,
 			decryptIV: data3,
 		})
-	}, 5000)
+	}, 10000)
 })
 // app.get("/", async (req, res) => {
 //   await connectDevice();
@@ -48,7 +48,7 @@ async function connectDevice() {
 		}
 		setTimeout(() => {
 			console.log("Connection made")
-		}, 1000)
+		}, 10000)
 	})
 
 	port.on("error", function (err) {
@@ -67,7 +67,7 @@ async function reciveData() {
 		}
 		setTimeout(() => {
 			console.log("Initiated data transfer")
-		}, 1000)
+		}, 15000)
 	})
 
 	port.on("error", function (err) {

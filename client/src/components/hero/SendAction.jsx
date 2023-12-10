@@ -13,6 +13,7 @@ import { TransactionContext } from "../../context/TransactionContext";
 import { shortenAddress } from "../../utils/shortenAddress";
 import Loader from "../Loader";
 import { initTransaction } from "../../lib/instance";
+import success from "../../success.svg";
 
 const style = {
   position: "absolute",
@@ -89,8 +90,9 @@ const SendAction = () => {
     setOpen(true);
     startTransaction();
   };
-
+  const [th, setTh] = useState("");
   const [pinLoading, setPinLoading] = useState(false);
+  const [successful, setSuccessful] = useState(false);
   console.log(
     nfcResponse.encryptedPrivateKey,
     currentAccount,
@@ -99,12 +101,13 @@ const SendAction = () => {
     nfcResponse.decryptIV,
     nfcResponse.decryptSalt
   );
-  const submitPin = (e) => {
+  async function submitPin() {
     // start loading
     // start transaction
     // wait for transaction to complete
     // if wron
     setPinLoading(true);
+    setSuccessful(false);
     try {
       console.log(
         nfcResponse.encryptedPrivateKey,
@@ -114,7 +117,7 @@ const SendAction = () => {
         nfcResponse.decryptIV,
         nfcResponse.decryptSalt
       );
-      initTransaction(
+      const x = await initTransaction(
         nfcResponse.encryptedPrivateKey,
         currentAccount,
         formData.amount,
@@ -122,13 +125,14 @@ const SendAction = () => {
         nfcResponse.decryptIV,
         nfcResponse.decryptSalt
       );
-      handleClose();
+      setTh(x);
+      setSuccessful(true);
     } catch (err) {
       setOtp("");
     } finally {
       setPinLoading(false);
     }
-  };
+  }
 
   return (
     <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10 lg:bottom-8 relative">
@@ -205,43 +209,67 @@ const SendAction = () => {
           ) : (
             // <Loader />
             // <Circler />
-            <div>
-              <Typography
-                id="modal-modal-title"
-                className=" text-center"
-                variant="h6"
-                component="h2"
-              >
-                Please enter the registered PIN
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <input
-                  type="password"
-                  value={otp}
-                  onChange={(e) => handleOtpChange(e.target.value)}
-                  maxLength={6}
-                  style={{
-                    width: "100%",
-                    height: "40px",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    fontSize: "20px",
-                    textAlign: "center",
-                    outline: "none",
-                    color: "#000",
-                    backgroundColor: "#fff",
-                  }}
-                  className="my-2 w-full rounded-md py-2 px-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-                />
-                <button
-                  type="button"
-                  onClick={submitPin}
-                  className="w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black"
-                >
-                  OK
-                </button>
-              </Typography>
-            </div>
+            <>
+              {pinLoading === false && (
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <>
+                  {successful === true ? (
+                    <div className="justify-center items-center flex flex-col gap-2">
+                      <img className="w-1/3 h-1/3" src={success} alt="" />
+                      <a
+                        href={`https://goerli.etherscan.io/tx/${th}`}
+                        className="underline"
+                      >
+                        Click here to see transaction on Ether Scan
+                      </a>
+                    </div>
+                  ) : (
+                    <div>
+                      <Typography
+                        id="modal-modal-title"
+                        className=" text-center"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Please enter the registered PIN
+                      </Typography>
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <input
+                          type="password"
+                          value={otp}
+                          onChange={(e) => handleOtpChange(e.target.value)}
+                          maxLength={6}
+                          style={{
+                            width: "100%",
+                            height: "40px",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            outline: "none",
+                            color: "#000",
+                            backgroundColor: "#fff",
+                          }}
+                          className="my-2 w-full rounded-md py-2 px-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+                        />
+                        <button
+                          type="button"
+                          onClick={submitPin}
+                          className="w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer text-black"
+                        >
+                          OK
+                        </button>
+                      </Typography>
+                    </div>
+                  )}
+                </>
+              )}
+              {pinLoading === true && (
+                <div>
+                  <Circler />
+                </div>
+              )}
+            </>
           )}
         </Box>
       </Modal>

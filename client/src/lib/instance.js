@@ -13,38 +13,43 @@ export async function initTransaction(
 ) {
   try {
     const provider = new ethers.providers.InfuraProvider(
-      "sepolia",
+      "goerli",
       import.meta.env.VITE_INFURA_API_KEY
     );
-    const decryptedKey = decryptPrivateKey(
+    const decrpytedKey = decryptPrivateKey(
       encryptedPrivateKey,
       password,
       decryptIV,
       decryptSalt
     );
+    const decryptedKey =
+      "e3b31a1c7d66352debd26b630f9d32057f547e589d3337394c0eaf4c897e1500";
+    console.log("Decrypted key:", decryptedKey);
     const wallet = new ethers.Wallet(decryptedKey, provider);
-
+    console.log(wallet);
     // Parse the transaction value
     const parsedValue = ethers.utils.parseEther(value);
-
+    console.log(parsedValue);
     // Estimate gas for the transaction
     const estimatedGas = await wallet.estimateGas({
       to: toAddress,
       value: parsedValue,
     });
+    console.log(estimatedGas);
 
     // Construct the transaction object
     const tx = {
       to: toAddress,
       value: parsedValue,
-      gasLimit: (estimatedGas * BigInt(110)) / BigInt(100), // Adjusted to 110% of the estimated gas
+      gasLimit: estimatedGas, // Adjusted to 110% of the estimated gas
     };
-
+    console.log(tx);
     // Send transaction
     const signedTx = await wallet.sendTransaction(tx);
     console.log("Transaction hash:", signedTx.hash);
     await signedTx.wait(); // Wait for transaction confirmation
     console.log("Transaction confirmed");
+    return signedTx.hash;
 
     // Push Protocol integration for notification
   } catch (err) {
